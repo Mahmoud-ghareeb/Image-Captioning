@@ -51,7 +51,7 @@ class CaptionMeLSTM(Model):
         
         self.encoder_model = ImageFeatureExtractor(image_model)
         self.decoder_model = DecoderLSTM(units, num_heads, key_dims, vocab_size, emb_size, dropout_rate)
-#         Dense(256, activatio='relu')
+        
     def call(self, inputs):
         x, y = inputs['encoder_inputs'], inputs['decoder_inputs']
         
@@ -78,4 +78,4 @@ if __name__ == '__main__':
 
     model = CaptionMeLSTM(image_model, num_heads, key_dims, units, vocab_size, emb_size, dropout_rate)
     model({"encoder_inputs": rand_img, "decoder_inputs": rand_txt})
-    model = model.load_weights('weights\\model_weights.h5')
+    model.load_weights('./weights/model_weights.h5')

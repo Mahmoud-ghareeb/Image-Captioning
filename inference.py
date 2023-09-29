@@ -24,14 +24,14 @@ def inference(caption_me, src, wrd_to_idx, idx_to_wrd):
 
         vect = wrd_to_idx[start]
         inputs = np.reshape(vect, (1, 1))
-        for i in range(1):
+        for i in range(33):
             outputs = caption_me({"encoder_inputs":test_img, "decoder_inputs": inputs}).numpy()
-            preds = outputs[:, -1, :]
+            preds = outputs[:, i, :]
             idx = tf.argmax(preds, axis=-1)[:, None]
             wrd = idx_to_wrd[idx.numpy()[0][0]]
             if wrd == '[END]' or wrd == '[START]':
                 break
-            print(wrd, end=" ")
+            # print(wrd, end=" ")
             tokens.append(wrd)
             inputs = tf.concat([inputs, idx], axis=1)
 
@@ -56,7 +56,7 @@ if __name__=='__main__':
 
     caption_me = CaptionMeLSTM(image_model, num_heads, key_dims, units, vocab_size, emb_size, dropout_rate)
     caption_me({"encoder_inputs": rand_img, "decoder_inputs": rand_txt})
-    caption_me = caption_me.load_weights('weights/model_weights.h5')
+    caption_me.load_weights('weights/model_weights.h5')
 
     with open('results/vocab.pkl', 'rb') as f:
         idx_to_wrd, wrd_to_idx = pickle.load(f)
